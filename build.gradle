@@ -80,6 +80,8 @@ dependencies {
     compile "org.aspectj:aspectjrt"
     compile "com.ofg:micro-infra-spring-boot-starter:$microInfraSpringVersion"
     compile 'org.projectlombok:lombok:1.16.4'
+    compile "de.codecentric:spring-boot-admin-starter-client:1.2.3"
+    compile 'org.jolokia:jolokia-core'
 
     runtime 'cglib:cglib-nodep:3.1'
     runtime 'org.objenesis:objenesis:2.1'

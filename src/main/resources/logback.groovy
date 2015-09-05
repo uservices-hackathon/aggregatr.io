@@ -58,3 +58,6 @@ if (System.getProperty(ACTIVE_PROFILES_PROPERTY_NAME) == PRODUCTION) {
 } else {
     logger("com.ofg", DEBUG)
 }
+
+// configuration for jolokia-core
+jmxConfigurator()
