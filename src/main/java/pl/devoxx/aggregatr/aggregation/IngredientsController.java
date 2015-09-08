@@ -21,7 +21,7 @@ public class IngredientsController {
         this.ingredientsAggregator = ingredientsAggregator;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST GLITCH)
     public Ingredients distributeIngredients(@RequestBody Order order) {
         return ingredientsAggregator.fetchIngredients(order);
     }
