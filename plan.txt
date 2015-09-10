@@ -7,19 +7,12 @@ https://gist.github.com/wybczu/45cd669120566083cb6a
 * Show accurest API
     * Show model
     * Show IngredientsProperties
-    * Show ExternalServicesStub
 * Show Controller
 * Show IngredientsWarehouse
 * Code IngredientsAggregator
-* Show on przentatr
-    * show hystrix dashboard
-    * show grafana with metrics
-    * show seyrene
-    * show slack #alerts
-    * show API swagger
-    * show alerts on phone
+    * run in dev mode with Swagger
 
-2) dojrzewatr
+2) call dojrzewatr from aggregatr
 
 * dojrzewatr accurest API
     * show/tell? about stubs from repo
@@ -28,3 +21,15 @@ https://gist.github.com/wybczu/45cd669120566083cb6a
 * call from prezentatr
     * show full path
     * show kibana with correlation id
+    * git checkout master
+
+3) Show on przentatr
+
+4) Show dashboards
+    * show hystrix dashboard
+    * show grafana with metrics
+    * show seyrene
+    * show slack #alerts
+    * show alerts on phone
+    * show microservice view
+    * show spring boot admin
