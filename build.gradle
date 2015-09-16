@@ -65,11 +65,27 @@ repositories {
     jcenter()
 }
 
+configurations {
+    all {
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'org.springframework.boot') {
+                    details.useVersion '1.2.5.RELEASE'
+                }
+                if (details.requested.group == 'org.springframework') {
+                    details.useVersion '4.2.1.RELEASE'
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework:spring-context-support"
     compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile "org.springframework.cloud:spring-cloud-starter-zipkin:1.0.0.M1"
     compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonMapper"
     compile "org.codehaus.jackson:jackson-core-asl:$jacksonMapper"
     compile 'com.google.guava:guava:18.0'

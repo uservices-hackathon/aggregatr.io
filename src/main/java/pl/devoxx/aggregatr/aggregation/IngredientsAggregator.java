@@ -1,15 +1,14 @@
 package pl.devoxx.aggregatr.aggregation;
 
 import com.codahale.metrics.Gauge;
-import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Trace;
 import org.springframework.stereotype.Component;
 import pl.devoxx.aggregatr.aggregation.model.Ingredient;
 import pl.devoxx.aggregatr.aggregation.model.IngredientType;
@@ -17,7 +16,6 @@ import pl.devoxx.aggregatr.aggregation.model.Ingredients;
 import pl.devoxx.aggregatr.aggregation.model.Order;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
@@ -37,12 +35,12 @@ class IngredientsAggregator {
     IngredientsAggregator(ServiceRestClient serviceRestClient,
                           RetryExecutor retryExecutor,
                           IngredientsProperties ingredientsProperties,
-                          MetricRegistry metricRegistry, IngredientWarehouse ingredientWarehouse) {
+                          MetricRegistry metricRegistry, IngredientWarehouse ingredientWarehouse, Trace trace) {
         this.serviceRestClient = serviceRestClient;
         this.retryExecutor = retryExecutor;
         this.ingredientWarehouse = ingredientWarehouse;
         this.dojrzewatrUpdater = new DojrzewatrUpdater(serviceRestClient, retryExecutor, ingredientsProperties,
-                ingredientWarehouse);
+                ingredientWarehouse, trace);
         this.ingredientsProperties = ingredientsProperties;
         setupMeters(metricRegistry);
     }
