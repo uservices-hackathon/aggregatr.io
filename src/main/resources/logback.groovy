@@ -58,3 +58,8 @@ if (System.getProperty(ACTIVE_PROFILES_PROPERTY_NAME) == PRODUCTION) {
 } else {
     logger("com.ofg", DEBUG)
 }
+
+logger("org.springframework.cloud.sleuth.log", ERROR)
+
+// configuration for jolokia-core
+jmxConfigurator()

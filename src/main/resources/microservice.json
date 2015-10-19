@@ -1,8 +1,8 @@
 {
     "pl": {
-        "this": "pl/devoxx/aggregatr",
+        "this": "pl/wjug/aggregatr",
         "dependencies" : {
-            "dojrzewatr": "pl/devoxx/dojrzewatr"
+            "dojrzewatr": "pl/wjug/dojrzewatr"
         }
     }
 }
