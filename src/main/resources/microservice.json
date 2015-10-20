@@ -1,8 +1,8 @@
 {
     "pl": {
-        "this": "pl/wjug/aggregatr",
+        "this": "pl/uservices/aggregatr",
         "dependencies" : {
-            "dojrzewatr": "pl/wjug/dojrzewatr"
+            "dojrzewatr": "pl/uservices/dojrzewatr"
         }
     }
 }

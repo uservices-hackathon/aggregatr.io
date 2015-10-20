@@ -6,4 +6,4 @@ stubrunner:
   #work-offline: true
   use-microservice-definitions: true
   stubs:
-    repository.root: "http://nexus.wjug:8081/nexus/content/repositories/releases/"
+    repository.root: "http://nexus.uservices:8081/nexus/content/repositories/releases/"

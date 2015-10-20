@@ -117,8 +117,8 @@ dependencies {
 }
 
 accurest {
-    baseClassForTests = 'pl.devoxx.aggregatr.aggregation.BaseMockMvcSpec'
-    basePackageForTests = 'pl.devoxx'
+    baseClassForTests = 'pl.uservices.aggregatr.aggregation.BaseMockMvcSpec'
+    basePackageForTests = 'pl.uservices'
     contractsDslDir = contractsDir
     generatedTestSourcesDir = file("${project.buildDir}/generated-sources/accurest")
     stubsOutputDir = wiremockStubsOutputDir
@@ -126,7 +126,7 @@ accurest {
 
 test.dependsOn { generateAccurest } //See: https://github.com/Codearte/accurest/issues/36
 
-task stubsJar(type: Jar, dependsOn: ["generateWiremockClientStubs"]) {
+task stubsJar(type: Jar, dependsOn: ["generateWireMockClientStubs"]) {
     baseName = "${project.name}-stubs"
     from wiremockStubsOutputDirRoot
 }
