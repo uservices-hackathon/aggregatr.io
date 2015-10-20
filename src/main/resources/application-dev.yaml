@@ -1,0 +1,1 @@
+spring.sleuth.zipkin.enabled: false
