@@ -1,10 +1,11 @@
-package pl.uservices.external.service.impl;
+package pl.uservices.aggregatr.service.external.impl;
 
-import pl.uservices.external.service.HopService;
+import org.springframework.stereotype.Service;
+import pl.uservices.aggregatr.service.external.HopService;
 
 import java.util.Random;
 
-
+@Service
 public class DefaultHopService implements HopService
 {
 

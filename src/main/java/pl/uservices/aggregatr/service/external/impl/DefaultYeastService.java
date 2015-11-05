@@ -1,10 +1,11 @@
-package pl.uservices.external.service.impl;
+package pl.uservices.aggregatr.service.external.impl;
 
 import java.util.Random;
 
-import pl.uservices.external.service.YeastService;
+import org.springframework.stereotype.Service;
+import pl.uservices.aggregatr.service.external.YeastService;
 
-
+@Service
 public class DefaultYeastService implements YeastService
 {
 
