@@ -19,4 +19,18 @@ public class OrderRequest
 		this.ingredients = ingredients;
 	}
 
+	@Override
+	public String toString()
+	{
+		final StringBuilder sb = new StringBuilder();
+		if (ingredients != null)
+		{
+			for (final Ingredient ingredient : ingredients)
+			{
+				sb.append(ingredient).append(" ");
+			}
+
+		}
+		return sb.toString();
+	}
 }
