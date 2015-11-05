@@ -1,6 +1,5 @@
 spring.application.name: aggregatr
 metrics.path.app: aggregatr
-rest.api.urls.to.list: .*ingredients.*
 stubrunner:
   #skip-local-repo: false
   #work-offline: true
