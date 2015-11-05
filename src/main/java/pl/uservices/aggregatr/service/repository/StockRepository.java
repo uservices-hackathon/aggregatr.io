@@ -5,65 +5,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Repository;
 
+import pl.uservices.aggregatr.service.dto.Ingredient;
+
 
 @Repository
 public class StockRepository
 {
 
-	private enum Ingredient
-	{
-		HOP, WATER, YEAST, MALT;
-	}
-
-
 	private final Map<Ingredient, Integer> stock = new ConcurrentHashMap<>();
+
 
 	public StockRepository()
 	{
-		stock.put(Ingredient.HOP, 0);
-		stock.put(Ingredient.WATER, 0);
-		stock.put(Ingredient.YEAST, 0);
-		stock.put(Ingredient.MALT, 0);
+		for (final Ingredient ingredient : Ingredient.values())
+		{
+			stock.put(ingredient, 0);
+		}
 	}
 
-	public int getHopAmount()
+	public int getAmount(final Ingredient ingredient)
 	{
-		return stock.get(Ingredient.HOP);
+		return stock.get(ingredient);
 	}
 
-	public int getMaltAmount()
+	public int modifyAmount(final Ingredient ingredient, final int delta)
 	{
-		return stock.get(Ingredient.MALT);
-	}
-
-	public int getWaterAmount()
-	{
-		return stock.get(Ingredient.WATER);
-	}
-
-	public int getYeastAmount()
-	{
-		return stock.get(Ingredient.YEAST);
-	}
-
-	public int modifyHopAmount(final int delta)
-	{
-		return stock.merge(Ingredient.HOP, delta, (currentVal, newVal) -> currentVal + newVal);
-	}
-
-	public int modifyMaltAmount(final int delta)
-	{
-		return stock.merge(Ingredient.MALT, delta, (currentVal, newVal) -> currentVal + newVal);
-	}
-
-	public int modifyWaterAmount(final int delta)
-	{
-		return stock.merge(Ingredient.WATER, delta, (currentVal, newVal) -> currentVal + newVal);
-	}
-
-	public int modifyYeastAmount(final int delta)
-	{
-		return stock.merge(Ingredient.YEAST, delta, (currentVal, newVal) -> currentVal + newVal);
+		return stock.merge(ingredient, delta, (currentVal, newVal) -> currentVal + newVal);
 	}
 
 }

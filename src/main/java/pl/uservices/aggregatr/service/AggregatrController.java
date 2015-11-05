@@ -53,29 +53,35 @@ public class AggregatrController
 	private Map<Ingredient, Integer> handleIngredientsOrder(final List<Ingredient> ingredients)
 	{
 		final Map<Ingredient, Integer> stock = new HashMap<>();
-		for (final Ingredient ingredient : ingredients)
+		for (final Ingredient ingredient : Ingredient.values())
 		{
-			switch (ingredient)
+			if (ingredients.contains(ingredient))
 			{
-				case HOP:
-					int orderHop = hopService.orderHop();
-					stock.put(Ingredient.HOP, stockRepository.modifyHopAmount(orderHop));
-					break;
-				case WATER:
-					int orderWater = waterService.orderWater();
-					stock.put(Ingredient.WATER, stockRepository.modifyWaterAmount(orderWater));
-					break;
-				case YEAST:
-					int orderYeast = yeastService.orderYeast();
-					stock.put(Ingredient.YEAST, stockRepository.modifyYeastAmount(orderYeast));
-					break;
-				case MALT:
-					int orderMalt = maltService.orderMalt();
-					stock.put(Ingredient.MALT, stockRepository.modifyMaltAmount(orderMalt));
-					break;
+				int orderedAmount = orderExternal(ingredient);
+				stock.put(ingredient, stockRepository.modifyAmount(ingredient, orderedAmount));
+			}
+			else
+			{
+				stock.put(ingredient, stockRepository.getAmount(ingredient));
 			}
 		}
 		return stock;
+	}
+
+	private int orderExternal(final Ingredient ingredient)
+	{
+		switch (ingredient)
+		{
+			case HOP:
+				return hopService.orderHop();
+			case WATER:
+				return waterService.orderWater();
+			case YEAST:
+				return yeastService.orderYeast();
+			case MALT:
+				return maltService.orderMalt();
+		}
+       return 0;
 	}
 
 	private boolean thresholdsExceeded(final Map<Ingredient, Integer> stock)

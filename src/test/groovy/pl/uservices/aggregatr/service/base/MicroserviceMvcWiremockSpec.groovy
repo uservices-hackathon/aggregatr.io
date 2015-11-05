@@ -5,7 +5,7 @@ import com.ofg.infrastructure.web.correlationid.CorrelationIdFilter
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder
-import pl.uservices.aggregatr.service.Application
+import pl.uservices.aggregatr.Application
 
 @ContextConfiguration(classes = [Application], loader = SpringApplicationContextLoader)
 class MicroserviceMvcWiremockSpec extends MvcWiremockIntegrationSpec {
