@@ -1,9 +1,7 @@
-package pl.uservices.external.service;
+package pl.uservices.aggregatr.service.external;
 
 import org.springframework.stereotype.Service;
 
-
-@Service
 public interface HopService
 {
 
