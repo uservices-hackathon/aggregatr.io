@@ -13,12 +13,12 @@ io.codearte.accurest.dsl.GroovyDsl.make {
 	response {
 		status 200
 		body( """{
-                        "stock": [
-                        {"HOP": 100},
-                        {"WATER": 100},
-                        {"YEAST": 100},
-                        {"MALT": 100}
-                        ]
+                        "stock":{
+                        "HOP": 100,
+                        "WATER": 100,
+                        "YEAST": 100,
+                        "MALT": 100
+                        }
                     }""")
 		headers { header('Content-Type': 'application/json') }
 	}
