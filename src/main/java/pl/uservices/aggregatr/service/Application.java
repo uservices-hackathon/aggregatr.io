@@ -1,4 +1,4 @@
-package pl.uservices.aggregatr;
+package pl.uservices.aggregatr.service;
 
 import com.ofg.config.BasicProfiles;
 import com.ofg.infrastructure.environment.EnvironmentSetupVerifier;

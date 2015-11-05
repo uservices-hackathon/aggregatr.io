@@ -1,4 +1,4 @@
-package pl.uservices.aggregatr.aggregation
+package pl.uservices.aggregatr.service.aggregation
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc
 import spock.lang.Specification
 
