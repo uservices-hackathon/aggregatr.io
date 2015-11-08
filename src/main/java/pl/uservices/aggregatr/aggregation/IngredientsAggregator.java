@@ -4,6 +4,7 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.netflix.hystrix.HystrixCommandKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,7 @@ class IngredientsAggregator {
         return serviceRestClient.forExternalService()
                 .retryUsing(retryExecutor)
                 .get()
-                .withCircuitBreaker(withGroupKey(asKey(service)), () -> {
+                .withCircuitBreaker(withGroupKey(asKey(service)).andCommandKey(HystrixCommandKey.Factory.asKey(service + "_command")), () -> {
                     log.error("Can't connect to {}", service);
                     return null;
                 })

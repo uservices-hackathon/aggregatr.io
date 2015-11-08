@@ -1,5 +1,8 @@
 package pl.uservices.aggregatr.aggregation;
 
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +51,17 @@ class DojrzewatrUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients) {
-        TraceScope scope = this.trace.startSpan("calling_dojrzewatr", new AlwaysSampler(), null);
         serviceRestClient.forService("dojrzewatr")
+                .retryUsing(retryExecutor)
                 .post()
+                .withCircuitBreaker(
+                        HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("dojrzewatr_threadpool"))
+                        .andCommandKey(HystrixCommandKey.Factory.asKey("dojrzewatr_command"))
+                )
                 .onUrl("/brew")
                 .body(ingredients)
                 .withHeaders().contentType(Version.DOJRZEWATR_V1)
                 .andExecuteFor()
-                .ignoringResponse();
-        scope.close();
+                .ignoringResponseAsync();
     }
 }
