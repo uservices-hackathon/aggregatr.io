@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/drozdzeo"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": "{ \"type\": \"YIEST\", \"quantity\": 1000 }"
+  }
+}
