@@ -18,7 +18,7 @@ public class IngredientsProperties {
             .put(IngredientType.WATER, "wodeo")
             .put(IngredientType.MALT, "slodeo")
             .put(IngredientType.HOP, "chmieleo")
-            .put(IngredientType.YIEST, "drozdzeo")
+            .put(IngredientType.YEAST, "drozdzeo")
             .build();
     private String rootUrl = "http://localhost:8030";
     private Integer threshold = 1000;

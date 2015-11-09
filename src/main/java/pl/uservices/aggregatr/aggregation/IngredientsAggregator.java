@@ -53,8 +53,8 @@ class IngredientsAggregator {
                 (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.HOP));
         metricRegistry.register(getMetricName(IngredientType.MALT),
                 (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.MALT));
-        metricRegistry.register(getMetricName(IngredientType.YIEST),
-                (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.YIEST));
+        metricRegistry.register(getMetricName(IngredientType.YEAST),
+                (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.YEAST));
     }
 
     private String getMetricName(IngredientType ingredientType) {

@@ -6,7 +6,7 @@ io.codearte.accurest.dsl.GroovyDsl.make {
             header 'Content-Type': 'application/vnd.pl.uservices.aggregatr.v1+json'
         }
         body('''
-            { "items" : ["MALT","WATER","HOP","YIEST"] }
+            { "items" : ["MALT","WATER","HOP","YEAST"] }
         ''')
     }
     response {
@@ -16,7 +16,7 @@ io.codearte.accurest.dsl.GroovyDsl.make {
                     [type: 'MALT', quantity: 200],
                     [type: 'WATER', quantity: 200],
                     [type: 'HOP', quantity: 200],
-                    [type: 'YIEST', quantity: 200]
+                    [type: 'YEAST', quantity: 200]
             ]
         )
     }
