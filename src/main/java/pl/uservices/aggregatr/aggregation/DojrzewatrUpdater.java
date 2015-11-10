@@ -4,11 +4,10 @@ import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
+import com.ofg.infrastructure.discovery.ServiceAlias;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Trace;
-import org.springframework.cloud.sleuth.TraceScope;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
@@ -51,12 +50,12 @@ class DojrzewatrUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients) {
-        serviceRestClient.forService("dojrzewatr")
+        serviceRestClient.forService(new ServiceAlias("dojrzewatr"))
                 .retryUsing(retryExecutor)
                 .post()
                 .withCircuitBreaker(
                         HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("dojrzewatr_threadpool"))
-                        .andCommandKey(HystrixCommandKey.Factory.asKey("dojrzewatr_command"))
+                                .andCommandKey(HystrixCommandKey.Factory.asKey("dojrzewatr_command"))
                 )
                 .onUrl("/brew")
                 .body(ingredients)
