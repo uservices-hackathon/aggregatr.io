@@ -1,5 +1,8 @@
 package pl.uservices.aggregatr.aggregation;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.Futures;
@@ -15,9 +18,6 @@ import pl.uservices.aggregatr.aggregation.model.Ingredient;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
 import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
@@ -53,8 +53,8 @@ class IngredientsAggregator {
                 (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.HOP));
         metricRegistry.register(getMetricName(IngredientType.MALT),
                 (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.MALT));
-        metricRegistry.register(getMetricName(IngredientType.YIEST),
-                (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.YIEST));
+        metricRegistry.register(getMetricName(IngredientType.YEAST),
+                (Gauge<Integer>) () -> ingredientWarehouse.getIngredientCountOfType(IngredientType.YEAST));
     }
 
     private String getMetricName(IngredientType ingredientType) {

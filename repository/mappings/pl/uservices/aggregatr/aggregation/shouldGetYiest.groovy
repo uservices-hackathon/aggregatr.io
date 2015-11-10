@@ -6,14 +6,14 @@ io.codearte.accurest.dsl.GroovyDsl.make {
             header 'Content-Type': 'application/vnd.pl.uservices.aggregatr.v1+json'
         }
         body('''
-            { "items" : ["YIEST"] }
+            { "items" : ["YEAST"] }
         ''')
     }
     response {
         status 200
         body(
             ingredients: [
-                    [type: 'YIEST', quantity: 200]
+                    [type: 'YEAST', quantity: 200]
             ]
         )
     }
