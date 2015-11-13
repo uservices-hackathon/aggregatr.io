@@ -4,8 +4,6 @@ import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Trace;
-import org.springframework.cloud.sleuth.TraceScope;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
@@ -48,7 +46,7 @@ class DojrzewatrUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients) {
-        TraceScope scope = this.trace.startSpan("calling_dojrzewatr", new AlwaysSampler(), null);
+        //TraceScope scope = this.trace.startSpan("calling_dojrzewatr", new AlwaysSampler(), null);
         serviceRestClient.forService("dojrzewatr")
                 .post()
                 .onUrl("/brew")
@@ -56,6 +54,6 @@ class DojrzewatrUpdater {
                 .withHeaders().contentType(Version.DOJRZEWATR_V1)
                 .andExecuteFor()
                 .ignoringResponse();
-        scope.close();
+        //scope.close();
     }
 }

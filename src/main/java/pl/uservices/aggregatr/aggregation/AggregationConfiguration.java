@@ -5,6 +5,7 @@ import com.ofg.infrastructure.discovery.ServiceResolver;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.sleuth.Sampler;
@@ -64,7 +65,7 @@ class AggregationConfiguration {
     }
 
     @Autowired RestTemplate restTemplate;
-    @Autowired ClientHttpRequestFactory clientHttpRequestFactory;
+    @Autowired @Qualifier("requestFactory")  ClientHttpRequestFactory clientHttpRequestFactory;
 
     @PostConstruct
     void postConstruct() {
