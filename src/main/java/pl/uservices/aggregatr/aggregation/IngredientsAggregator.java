@@ -1,8 +1,5 @@
 package pl.uservices.aggregatr.aggregation;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.util.concurrent.Futures;
@@ -18,6 +15,9 @@ import pl.uservices.aggregatr.aggregation.model.Ingredient;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
 import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
@@ -40,7 +40,7 @@ class IngredientsAggregator {
         this.serviceRestClient = serviceRestClient;
         this.retryExecutor = retryExecutor;
         this.ingredientWarehouse = ingredientWarehouse;
-        this.dojrzewatrUpdater = new DojrzewatrUpdater(serviceRestClient, retryExecutor, ingredientsProperties,
+        this.dojrzewatrUpdater = new DojrzewatrUpdater(serviceRestClient, ingredientsProperties,
                 ingredientWarehouse, trace);
         this.ingredientsProperties = ingredientsProperties;
         setupMeters(metricRegistry);

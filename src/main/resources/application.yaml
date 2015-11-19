@@ -7,3 +7,4 @@ stubrunner:
   use-microservice-definitions: true
   stubs:
     repository.root: "http://nexus.uservices.pl:8081/nexus/content/repositories/releases/"
+spring.zipkin.enabled: false
