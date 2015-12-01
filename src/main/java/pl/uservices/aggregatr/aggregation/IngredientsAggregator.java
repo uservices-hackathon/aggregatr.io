@@ -1,8 +1,10 @@
 package pl.uservices.aggregatr.aggregation;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
@@ -15,9 +17,6 @@ import pl.uservices.aggregatr.aggregation.model.Ingredient;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
 import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
@@ -40,7 +39,7 @@ class IngredientsAggregator {
         this.serviceRestClient = serviceRestClient;
         this.retryExecutor = retryExecutor;
         this.ingredientWarehouse = ingredientWarehouse;
-        this.dojrzewatrUpdater = new DojrzewatrUpdater(serviceRestClient, ingredientsProperties,
+        this.dojrzewatrUpdater = new DojrzewatrUpdater(serviceRestClient, retryExecutor,  ingredientsProperties,
                 ingredientWarehouse, trace);
         this.ingredientsProperties = ingredientsProperties;
         setupMeters(metricRegistry);
@@ -62,13 +61,18 @@ class IngredientsAggregator {
     }
 
     Ingredients fetchIngredients(Order order) {
-        List<ListenableFuture<Ingredient>> futures = ingredientsProperties
-                .getListOfServiceNames(order)
-                .stream()
-                .map(this::harvest)
-                .collect(Collectors.toList());
-        ListenableFuture<List<Ingredient>> allDoneFutures = Futures.allAsList(futures);
-        List<Ingredient> allIngredients = Futures.getUnchecked(allDoneFutures);
+//        List<ListenableFuture<Ingredient>> futures = ingredientsProperties
+//                .getListOfServiceNames(order)
+//                .stream()
+//                .map(this::harvest)
+//                .collect(Collectors.toList());
+//        ListenableFuture<List<Ingredient>> allDoneFutures = Futures.allAsList(futures);
+//        List<Ingredient> allIngredients = Futures.getUnchecked(allDoneFutures);
+        List<Ingredient> allIngredients = Arrays.asList(new Ingredient(IngredientType.HOP, 1000),
+                new Ingredient(IngredientType.MALT, 1000),
+        new Ingredient(IngredientType.YEAST, 1000),
+        new Ingredient(IngredientType.WATER, 1000)
+                );
         allIngredients.stream()
                 .filter(ingredient -> ingredient != null)
                 .forEach(ingredientWarehouse::addIngredient);

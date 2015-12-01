@@ -1,14 +1,12 @@
 package pl.uservices.aggregatr.aggregation;
 
-import com.nurkiewicz.asyncretry.AsyncRetryExecutor;
+import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Trace;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
-
-import java.util.concurrent.Executors;
 
 @Slf4j
 class DojrzewatrUpdater {
@@ -17,13 +15,15 @@ class DojrzewatrUpdater {
     private final IngredientsProperties ingredientsProperties;
     private final IngredientWarehouse ingredientWarehouse;
     private final Trace trace;
+    private final RetryExecutor retryExecutor;
 
     public DojrzewatrUpdater(ServiceRestClient serviceRestClient,
-                             IngredientsProperties ingredientsProperties, IngredientWarehouse ingredientWarehouse, Trace trace) {
+                             RetryExecutor retryExecutor, IngredientsProperties ingredientsProperties, IngredientWarehouse ingredientWarehouse, Trace trace) {
         this.serviceRestClient = serviceRestClient;
         this.ingredientsProperties = ingredientsProperties;
         this.ingredientWarehouse = ingredientWarehouse;
         this.trace = trace;
+        this.retryExecutor = retryExecutor;
     }
 
     Ingredients updateIfLimitReached(Ingredients ingredients) {
@@ -47,7 +47,7 @@ class DojrzewatrUpdater {
 
     private void notifyDojrzewatr(Ingredients ingredients) {
         serviceRestClient.forService("dojrzewatr")
-                .retryUsing(new AsyncRetryExecutor(Executors.newSingleThreadScheduledExecutor()).dontRetry())
+                .retryUsing(retryExecutor)
                 .post()
                 .onUrl("/brew")
                 .body(ingredients)
