@@ -1,17 +1,16 @@
 package pl.uservices.aggregatr.aggregation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
 import pl.uservices.aggregatr.aggregation.model.Version;
 
 @RestController
 @RequestMapping(value = "/ingredients", consumes = Version.AGGREGATOR_V1, produces = MediaType.APPLICATION_JSON_VALUE)
+@Slf4j
 public class IngredientsController {
 
     private final IngredientsAggregator ingredientsAggregator;
@@ -22,8 +21,9 @@ public class IngredientsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Ingredients distributeIngredients(@RequestBody Order order) {
-        return ingredientsAggregator.fetchIngredients(order);
+    public Ingredients distributeIngredients(@RequestBody Order order, @RequestHeader("PROCESS-ID") String processId) {
+        log.info("Starting process for process id [{}]", processId);
+        return ingredientsAggregator.fetchIngredients(order, processId);
     }
 
 }

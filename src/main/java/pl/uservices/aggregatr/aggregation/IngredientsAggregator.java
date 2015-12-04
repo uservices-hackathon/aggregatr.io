@@ -44,7 +44,7 @@ class IngredientsAggregator {
         this.ingredientsProperties = ingredientsProperties;
     }
 
-    Ingredients fetchIngredients(Order order) {
+    Ingredients fetchIngredients(Order order, String processId) {
         List<ListenableFuture<ResponseEntity<Ingredient>>> futures = ingredientsProperties
                 .getListOfServiceNames(order)
                 .stream()
@@ -58,7 +58,7 @@ class IngredientsAggregator {
                 .filter(ingredient -> ingredient != null)
                 .forEach(ingredientWarehouse::addIngredient);
         Ingredients ingredients = ingredientWarehouse.getCurrentState();
-        return dojrzewatrUpdater.updateIfLimitReached(ingredients);
+        return dojrzewatrUpdater.updateIfLimitReached(ingredients, processId);
     }
 
     private <T> T getUnchecked(Future<T> future) {

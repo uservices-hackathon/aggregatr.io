@@ -21,10 +21,10 @@ class DojrzewatrUpdater {
         this.maturingServiceClient = maturingServiceClient;
     }
 
-    Ingredients updateIfLimitReached(Ingredients ingredients) {
+    Ingredients updateIfLimitReached(Ingredients ingredients, String processId) {
         if (ingredientsMatchTheThreshold(ingredients)) {
             log.info("Ingredients match the threshold - time to notify dojrzewatr!");
-            notifyDojrzewatr(ingredients);
+            notifyDojrzewatr(ingredients, processId);
             ingredientWarehouse.useIngredients(ingredientsProperties.getThreshold());
         }
         Ingredients currentState = ingredientWarehouse.getCurrentState();
@@ -40,7 +40,7 @@ class DojrzewatrUpdater {
         return allIngredientsPresent && allIngredientsOverThreshold;
     }
 
-    private void notifyDojrzewatr(Ingredients ingredients) {
-        maturingServiceClient.distributeIngredients(ingredients);
+    private void notifyDojrzewatr(Ingredients ingredients, String processId) {
+        maturingServiceClient.distributeIngredients(ingredients, processId);
     }
 }

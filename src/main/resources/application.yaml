@@ -8,7 +8,3 @@ server:
   port: 9092
 
 spring.cloud.zookeeper.discovery.root: /pl
-spring.cloud.zookeeper:
-  dependencies:
-    dojrzewatr:
-      path: uservices/dojrzewatr
