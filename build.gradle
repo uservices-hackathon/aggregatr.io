@@ -3,32 +3,38 @@ buildscript {
         mavenLocal()
         jcenter()
         mavenCentral()
+        maven {
+            url "http://repo.spring.io/snapshot"
+        }
+        maven {
+            url "http://repo.spring.io/milestone"
+        }
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE'
-        classpath 'com.ofg:uptodate-gradle-plugin:+'
-        classpath "io.codearte.accurest:accurest-gradle-plugin:$accurestVersion"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:+"
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
         classpath 'org.ajoberstar:gradle-git:0.12.0'
+
+        if (project.hasProperty("coverage")) {
+            classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2'
+        }
     }
 }
 
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'maven-publish'
-apply plugin: 'com.ofg.uptodate'
-apply plugin: 'accurest'
+apply plugin: 'docker'
 
 ext {
     buildNrLoc = project.hasProperty('buildNr') ? "${buildNr}" : "CD-000"
-    projectGroupId = groupId
-
-    contractsDir = file("${project.rootDir}/repository/mappings/")
-    wiremockStubsOutputDirRoot = file("${project.buildDir}/production/${project.name}-stubs/")
-    wiremockStubsOutputDir = new File(wiremockStubsOutputDirRoot, 'mappings/')
 }
 
-group = projectGroupId
+group = 'org.springframework.cloud.testapp'
 version = buildNrLoc
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src/main/java"]
 
 sourceCompatibility = '1.8'
 
@@ -44,29 +50,20 @@ configurations {
                 if (details.requested.name == 'servlet-api') {
                     details.useTarget("org.apache.tomcat.embed:tomcat-embed-core:8.0.23")
                 }
-                if (details.requested.group == 'org.springframework.boot') { details.useVersion '1.3.0.RELEASE' }
-                if (details.requested.group == 'org.springframework') { details.useVersion '4.2.3.RELEASE' }
-                if (details.requested.group == 'org.springframework.cloud' &&
-                        ['sleuth', 'zipkin', 'zookeeper'].every { !details.requested.name.contains(it) } ) { details.useVersion '1.1.0.M3' }
             }
         }
-    }
-}
-
-project.gradle.projectsEvaluated {
-    applicationDefaultJvmArgs = project.gradle.startParameter.systemPropertiesArgs.entrySet().collect{"-D${it.key}=${it.value}"}
-}
-
-test {
-    jvmArgs = project.gradle.startParameter.systemPropertiesArgs.entrySet().collect{"-D${it.key}=${it.value}"} + ['-Xmx512m']
-    testLogging {
-        exceptionFormat = 'full'
     }
 }
 
 repositories {
     mavenLocal()
     jcenter()
+    maven {
+        url "http://repo.spring.io/snapshot"
+    }
+    maven {
+        url "http://repo.spring.io/milestone"
+    }
 }
 
 dependencies {
@@ -74,7 +71,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework:spring-context-support"
     compile 'com.fasterxml.jackson.core:jackson-databind'
-    compile "org.springframework.cloud:spring-cloud-starter-zipkin:1.0.0.M3"
+    compile "org.springframework.cloud:spring-cloud-starter-zookeeper-discovery:1.0.0.BUILD-SNAPSHOT"
+    compile "org.springframework.cloud:spring-cloud-starter-zipkin:1.0.0.BUILD-SNAPSHOT"
+    compile "org.springframework.cloud:spring-cloud-starter-feign:+"
     compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonMapper"
     compile "org.codehaus.jackson:jackson-core-asl:$jacksonMapper"
     compile 'com.google.guava:guava:18.0'
@@ -84,52 +83,40 @@ dependencies {
     compile 'org.yaml:snakeyaml'
     compile 'org.hibernate:hibernate-validator'
     compile "org.aspectj:aspectjrt"
-    compile "com.ofg:micro-infra-spring-boot-starter:$microInfraSpringVersion"
-    compile 'org.projectlombok:lombok:1.16.6'
+    compile 'org.codehaus.gpars:gpars:1.2.1'
+    compile 'net.sf.ehcache:ehcache:2.10.1'
     compile "de.codecentric:spring-boot-admin-starter-client:1.2.3"
     compile 'org.jolokia:jolokia-core'
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    compile "commons-io:commons-io:2.4"
+    compile 'org.projectlombok:lombok:1.16.6'
 
     runtime 'cglib:cglib-nodep:3.1'
     runtime 'org.objenesis:objenesis:2.2'
     runtime 'org.aspectj:aspectjweaver'
 
-    testCompile "org.codehaus.groovy:groovy-all"
     testCompile 'com.jayway.awaitility:awaitility:1.6.5'
     compile('com.github.tomakehurst:wiremock:2.0.4-beta') {
         exclude group: 'org.mortbay.jetty', module: 'servlet-api'
     }
     testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "com.ofg:micro-infra-spring-test:$microInfraSpringVersion"
     testCompile "org.spockframework:spock-spring"
     testCompile "com.jayway.restassured:rest-assured:$restAssuredVersion"
     testCompile "com.jayway.restassured:spring-mock-mvc:$restAssuredVersion"
 }
 
-accurest {
-    baseClassForTests = 'pl.uservices.aggregatr.aggregation.BaseMockMvcSpec'
-    basePackageForTests = 'pl.uservices'
-    contractsDslDir = contractsDir
-    generatedTestSourcesDir = file("${project.buildDir}/generated-sources/accurest")
-    stubsOutputDir = wiremockStubsOutputDir
-}
-
-test.dependsOn { generateAccurest } //See: https://github.com/Codearte/accurest/issues/36
-
-task stubsJar(type: Jar, dependsOn: ["generateWireMockClientStubs"]) {
-    baseName = "${project.name}-stubs"
-    from wiremockStubsOutputDirRoot
-}
-
-bootRepackage {
-    withJarTask = "jar"
+task docker(type: Docker) {
+    dependsOn 'build'
+    dryRun true
+    setEnvironment('CONFIG_FOLDER', '/properties')
+    addFile("properties", "/properties")
+    addFile("${libsDir}/${project.name}-${buildNrLoc}.jar", "/${project.name}/${project.name}.jar")
+    exposePort(8095)
+    entryPoint(['java', '-jar', "/${project.name}/${project.name}.jar"])
 }
 
 //Make sure that fat jar is built before uploading
 project.tasks.findAll { it.name.startsWith('publish') || it.name == 'bintrayUpload' }*.dependsOn { bootRepackage }
-
-artifacts {
-    archives stubsJar
-}
 
 publishing {
     repositories {
@@ -142,10 +129,6 @@ publishing {
         }
     }
     publications {
-        stubs(MavenPublication) {
-            artifactId "${project.name}-stubs"
-            artifact stubsJar
-        }
         mavenJava(MavenPublication) {
             from components.java
             pom.withXml {
@@ -158,6 +141,10 @@ publishing {
 
 String getProp(String propName) {
     return hasProperty(propName) ? (getProperty(propName) ?: System.properties[propName]) : System.properties[propName]
+}
+
+wrapper {
+    gradleVersion '2.9'
 }
 
 task addHashFile << {
@@ -183,15 +170,4 @@ jar {
 
 bootRepackage {
     withJarTask = "jar"
-}
-
-task bootRunDev(type: org.springframework.boot.gradle.run.BootRunTask) {
-    group = 'Application'
-    doFirst() {
-        main = project.mainClassName
-        classpath = sourceSets.main.runtimeClasspath
-        systemProperty 'APP_ENV', 'dev'
-        systemProperty 'CONFIG_FOLDER', 'properties'
-        systemProperty 'spring.profiles.active', 'dev,springCloud'
-    }
 }

@@ -1,8 +1,0 @@
-{
-    "pl": {
-        "this": "pl/uservices/aggregatr",
-        "dependencies" : {
-            "dojrzewatr": "pl/uservices/dojrzewatr"
-        }
-    }
-}

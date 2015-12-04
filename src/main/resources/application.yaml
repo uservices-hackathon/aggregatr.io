@@ -1,10 +1,14 @@
 spring.application.name: aggregatr
-metrics.path.app: aggregatr
-rest.api.urls.to.list: .*ingredients.*
-stubrunner:
-  #skip-local-repo: false
-  #work-offline: true
-  use-microservice-definitions: true
-  stubs:
-    repository.root: "http://nexus.uservices.pl:8081/nexus/content/repositories/releases/"
-spring.zipkin.enabled: false
+
+logging:
+  pattern:
+    level: '%clr([trace=%X{X-Trace-Id:-},span=%X{X-Span-Id:-}]){yellow} %5p'
+
+server:
+  port: 9092
+
+spring.cloud.zookeeper.discovery.root: /pl
+spring.cloud.zookeeper:
+  dependencies:
+    dojrzewatr:
+      path: uservices/dojrzewatr

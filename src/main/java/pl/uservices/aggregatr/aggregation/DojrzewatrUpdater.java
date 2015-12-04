@@ -1,7 +1,5 @@
 package pl.uservices.aggregatr.aggregation;
 
-import com.nurkiewicz.asyncretry.RetryExecutor;
-import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.sleuth.Trace;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
@@ -11,19 +9,16 @@ import pl.uservices.aggregatr.aggregation.model.Version;
 @Slf4j
 class DojrzewatrUpdater {
 
-    private final ServiceRestClient serviceRestClient;
     private final IngredientsProperties ingredientsProperties;
     private final IngredientWarehouse ingredientWarehouse;
-    private final Trace trace;
-    private final RetryExecutor retryExecutor;
+    private final MaturingServiceClient maturingServiceClient;
 
-    public DojrzewatrUpdater(ServiceRestClient serviceRestClient,
-                             RetryExecutor retryExecutor, IngredientsProperties ingredientsProperties, IngredientWarehouse ingredientWarehouse, Trace trace) {
-        this.serviceRestClient = serviceRestClient;
+    public DojrzewatrUpdater(IngredientsProperties ingredientsProperties,
+                             IngredientWarehouse ingredientWarehouse,
+                             MaturingServiceClient maturingServiceClient) {
         this.ingredientsProperties = ingredientsProperties;
         this.ingredientWarehouse = ingredientWarehouse;
-        this.trace = trace;
-        this.retryExecutor = retryExecutor;
+        this.maturingServiceClient = maturingServiceClient;
     }
 
     Ingredients updateIfLimitReached(Ingredients ingredients) {
@@ -46,13 +41,6 @@ class DojrzewatrUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients) {
-        serviceRestClient.forService("dojrzewatr")
-                .retryUsing(retryExecutor)
-                .post()
-                .onUrl("/brew")
-                .body(ingredients)
-                .withHeaders().contentType(Version.DOJRZEWATR_V1)
-                .andExecuteFor()
-                .ignoringResponseAsync();
+        maturingServiceClient.distributeIngredients(ingredients);
     }
 }

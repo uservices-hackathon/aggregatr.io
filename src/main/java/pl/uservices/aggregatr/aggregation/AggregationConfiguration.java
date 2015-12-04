@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.util.SocketUtils;
+import org.springframework.web.client.AsyncRestTemplate;
 
 @Configuration
-@Import(ExecutorConfig.class)
 class AggregationConfiguration {
     @Bean
     IngredientsProperties ingredientsProperties(@Value("${ingredients.rootUrl:}") String rootUrl) {
@@ -25,34 +26,9 @@ class AggregationConfiguration {
         return new ExternalServicesStub(ingredientsProperties);
     }
 
-//    @Bean
-//    ScheduledExecutorService scheduledExecutorService() {
-//        return Executors.newScheduledThreadPool(10);
-//    }
-//
-//    @Bean
-//    RetryExecutor notRetryingRetryExecutor() {
-//        return new AsyncRetryExecutor(scheduledExecutorService()).dontRetry();
-//    }
-
-//    @Bean
-//    @Primary
-//    public ServiceRestClient serviceRestClientWithRestTemplate(RestTemplate restTemplate, ServiceResolver serviceResolver, ServiceConfigurationResolver configurationResolver, Trace trace) {
-//        return new ServiceRestClient(restTemplate, serviceResolver, configurationResolver, trace);
-//    }
-//    @Bean
-//    @Primary
-//    public ServiceRestClient serviceRestClientWithRestTemplate(RestTemplate restTemplate, ServiceResolver serviceResolver, ServiceConfigurationResolver configurationResolver, Trace trace) {
-//        return new ServiceRestClient(restTemplate, serviceResolver, configurationResolver, trace);
-//    }
-//
-//    @Autowired RestTemplate restTemplate;
-//    @Autowired @Qualifier("requestFactory")  ClientHttpRequestFactory clientHttpRequestFactory;
-//
-//    @PostConstruct
-//    void postConstruct() {
-//        restTemplate.setRequestFactory(clientHttpRequestFactory);
-//    }
-
+    @Bean
+    AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
+    }
 }
 
