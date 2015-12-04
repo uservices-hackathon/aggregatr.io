@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.sleuth.TraceManager;
 import org.springframework.cloud.sleuth.instrument.hystrix.TraceCommand;
 import org.springframework.http.HttpEntity;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
 import pl.uservices.aggregatr.aggregation.model.Ingredient;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
@@ -35,12 +37,12 @@ class IngredientsAggregator {
     IngredientsAggregator(IngredientsProperties ingredientsProperties,
                           IngredientWarehouse ingredientWarehouse,
                           TraceManager traceManager, AsyncRestTemplate asyncRestTemplate,
-                          MaturingServiceClient maturingServiceClient) {
+                          MaturingServiceClient maturingServiceClient, @LoadBalanced RestTemplate restTemplate) {
         this.ingredientWarehouse = ingredientWarehouse;
         this.asyncRestTemplate = asyncRestTemplate;
         this.traceManager = traceManager;
         this.dojrzewatrUpdater = new MaturingServiceUpdater(ingredientsProperties,
-                ingredientWarehouse, maturingServiceClient);
+                ingredientWarehouse, maturingServiceClient, restTemplate);
         this.ingredientsProperties = ingredientsProperties;
     }
 
