@@ -9,7 +9,7 @@ import pl.uservices.aggregatr.aggregation.model.Order;
 import pl.uservices.aggregatr.aggregation.model.Version;
 
 @RestController
-@RequestMapping(value = "/ingredients", consumes = Version.AGGREGATOR_V1, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/ingredients", consumes = Version.AGGREGATING_V1, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class IngredientsController {
 

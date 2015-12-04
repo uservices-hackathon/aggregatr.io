@@ -26,7 +26,7 @@ import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
 class IngredientsAggregator {
 
     private final IngredientsProperties ingredientsProperties;
-    private final DojrzewatrUpdater dojrzewatrUpdater;
+    private final MaturingServiceUpdater dojrzewatrUpdater;
     private final IngredientWarehouse ingredientWarehouse;
     private final AsyncRestTemplate asyncRestTemplate;
     private final TraceManager traceManager;
@@ -39,7 +39,7 @@ class IngredientsAggregator {
         this.ingredientWarehouse = ingredientWarehouse;
         this.asyncRestTemplate = asyncRestTemplate;
         this.traceManager = traceManager;
-        this.dojrzewatrUpdater = new DojrzewatrUpdater(ingredientsProperties,
+        this.dojrzewatrUpdater = new MaturingServiceUpdater(ingredientsProperties,
                 ingredientWarehouse, maturingServiceClient);
         this.ingredientsProperties = ingredientsProperties;
     }

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
 
-@FeignClient("dojrzewatr")
-@RequestMapping(value = "/brew", consumes = Version.DOJRZEWATR_V1)
+@FeignClient("maturing")
+@RequestMapping(value = "/brew", consumes = Version.MATURING_V1)
 public interface MaturingServiceClient {
     @RequestMapping(method = RequestMethod.POST)
     void distributeIngredients(Ingredients ingredients, @RequestHeader("PROCESS-ID") String processId);

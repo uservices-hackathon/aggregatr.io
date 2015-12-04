@@ -7,15 +7,15 @@ import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
 
 @Slf4j
-class DojrzewatrUpdater {
+class MaturingServiceUpdater {
 
     private final IngredientsProperties ingredientsProperties;
     private final IngredientWarehouse ingredientWarehouse;
     private final MaturingServiceClient maturingServiceClient;
 
-    public DojrzewatrUpdater(IngredientsProperties ingredientsProperties,
-                             IngredientWarehouse ingredientWarehouse,
-                             MaturingServiceClient maturingServiceClient) {
+    public MaturingServiceUpdater(IngredientsProperties ingredientsProperties,
+                                  IngredientWarehouse ingredientWarehouse,
+                                  MaturingServiceClient maturingServiceClient) {
         this.ingredientsProperties = ingredientsProperties;
         this.ingredientWarehouse = ingredientWarehouse;
         this.maturingServiceClient = maturingServiceClient;

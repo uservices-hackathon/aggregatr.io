@@ -1,4 +1,4 @@
-spring.application.name: aggregatr
+spring.application.name: aggregating
 
 logging:
   pattern:

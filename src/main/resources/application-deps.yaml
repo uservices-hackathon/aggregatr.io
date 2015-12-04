@@ -1,4 +1,4 @@
 spring.cloud.zookeeper:
   dependencies:
-    dojrzewatr:
-      path: uservices/dojrzewatr
+    maturing:
+      path: uservices/maturing
