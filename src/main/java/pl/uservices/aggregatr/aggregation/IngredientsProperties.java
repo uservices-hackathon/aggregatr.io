@@ -1,24 +1,25 @@
 package pl.uservices.aggregatr.aggregation;
 
-import com.google.common.collect.ImmutableMap;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import pl.uservices.aggregatr.aggregation.model.IngredientType;
-import pl.uservices.aggregatr.aggregation.model.Order;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.google.common.collect.ImmutableMap;
+import lombok.Data;
+import pl.uservices.aggregatr.aggregation.model.IngredientType;
+import pl.uservices.aggregatr.aggregation.model.Order;
 
 @ConfigurationProperties("ingredients")
 @Data
 public class IngredientsProperties {
 
     private Map<IngredientType, String> serviceNames = ImmutableMap.<IngredientType, String>builder()
-            .put(IngredientType.WATER, "wodeo")
-            .put(IngredientType.MALT, "slodeo")
-            .put(IngredientType.HOP, "chmieleo")
-            .put(IngredientType.YEAST, "drozdzeo")
+            .put(IngredientType.WATER, IngredientType.WATER.name().toLowerCase())
+            .put(IngredientType.MALT, IngredientType.MALT.name().toLowerCase())
+            .put(IngredientType.HOP, IngredientType.HOP.name().toLowerCase())
+            .put(IngredientType.YEAST, IngredientType.YEAST.name().toLowerCase())
             .build();
     private String rootUrl = "http://localhost:8030";
     private Integer threshold = 1000;

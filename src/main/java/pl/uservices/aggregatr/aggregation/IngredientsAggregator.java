@@ -1,30 +1,27 @@
 package pl.uservices.aggregatr.aggregation;
 
+import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
+import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
+
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.sleuth.TraceManager;
 import org.springframework.cloud.sleuth.instrument.hystrix.TraceCommand;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFuture;
-import com.netflix.hystrix.HystrixCommandKey;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+
+import com.netflix.hystrix.HystrixCommandKey;
+import lombok.extern.slf4j.Slf4j;
 import pl.uservices.aggregatr.aggregation.model.Ingredient;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Order;
 
-import static com.netflix.hystrix.HystrixCommand.Setter.withGroupKey;
-import static com.netflix.hystrix.HystrixCommandGroupKey.Factory.asKey;
-
 @Slf4j
-@Component
 class IngredientsAggregator {
 
     private final IngredientsProperties ingredientsProperties;
@@ -33,11 +30,10 @@ class IngredientsAggregator {
     private final AsyncRestTemplate asyncRestTemplate;
     private final TraceManager traceManager;
 
-    @Autowired
     IngredientsAggregator(IngredientsProperties ingredientsProperties,
                           IngredientWarehouse ingredientWarehouse,
                           TraceManager traceManager, AsyncRestTemplate asyncRestTemplate,
-                          MaturingServiceClient maturingServiceClient, @LoadBalanced RestTemplate restTemplate) {
+                          MaturingServiceClient maturingServiceClient, RestTemplate restTemplate) {
         this.ingredientWarehouse = ingredientWarehouse;
         this.asyncRestTemplate = asyncRestTemplate;
         this.traceManager = traceManager;

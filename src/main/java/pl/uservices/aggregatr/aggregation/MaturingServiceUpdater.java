@@ -1,15 +1,19 @@
 package pl.uservices.aggregatr.aggregation;
 
-import lombok.extern.slf4j.Slf4j;
+import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.CURRENT_HOLDER;
+import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.TEST_COMMUNICATION_TYPE_HEADER_NAME;
+
+import java.net.URI;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.client.RestTemplate;
+
+import lombok.extern.slf4j.Slf4j;
 import pl.uservices.aggregatr.aggregation.model.IngredientType;
 import pl.uservices.aggregatr.aggregation.model.Ingredients;
 import pl.uservices.aggregatr.aggregation.model.Version;
-
-import java.net.URI;
 
 @Slf4j
 class MaturingServiceUpdater {
@@ -48,18 +52,23 @@ class MaturingServiceUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients, String processId) {
-        //callViaFeign(ingredients, processId);
-        useRestTemplateToCallAggregation(ingredients, processId);
+        switch (CURRENT_HOLDER.get().getTestCommunicationType()) {
+            case FEIGN:
+                callViaFeign(ingredients, processId);
+                break;
+            default:
+                useRestTemplateToCallAggregation(ingredients, processId);
+        }
     }
 
     private void callViaFeign(Ingredients ingredients, String processId) {
         maturingServiceClient.distributeIngredients(ingredients, processId);
     }
 
-    //TODO: Toggle on property or sth
     private void useRestTemplateToCallAggregation(Ingredients body, String processId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("PROCESS-ID", processId);
+        headers.add(TEST_COMMUNICATION_TYPE_HEADER_NAME, TestConfigurationHolder.CURRENT_HOLDER.get().getTestCommunicationType().name());
         headers.add("Content-Type", Version.MATURING_V1);
         String serviceName = "maturing";
         String url = "brew";

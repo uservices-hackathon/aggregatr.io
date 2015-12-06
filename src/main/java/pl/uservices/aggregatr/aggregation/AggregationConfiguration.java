@@ -4,12 +4,13 @@ import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.sleuth.TraceManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.util.SocketUtils;
 import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 class AggregationConfiguration {
@@ -29,6 +30,16 @@ class AggregationConfiguration {
     @Bean
     AsyncRestTemplate asyncRestTemplate() {
         return new AsyncRestTemplate();
+    }
+
+    @Bean
+    IngredientsAggregator ingredientsAggregator(IngredientsProperties ingredientsProperties,
+                                                IngredientWarehouse ingredientWarehouse,
+                                                TraceManager traceManager, AsyncRestTemplate asyncRestTemplate,
+                                                MaturingServiceClient maturingServiceClient,
+                                                @LoadBalanced RestTemplate restTemplate) {
+        return new IngredientsAggregator(ingredientsProperties, ingredientWarehouse, traceManager,
+                asyncRestTemplate, maturingServiceClient, restTemplate);
     }
 }
 
