@@ -163,6 +163,10 @@ git.commit.time=${gitCommitTime}
 """
 }
 
+bootRun {
+    jvmArgs = project.gradle.startParameter.systemPropertiesArgs.entrySet().collect{"-D${it.key}=${it.value}"}
+}
+
 jar {
     dependsOn addHashFile
     from "git.properties"
