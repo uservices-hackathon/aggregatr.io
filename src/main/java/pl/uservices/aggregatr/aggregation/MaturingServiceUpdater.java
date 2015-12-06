@@ -1,6 +1,6 @@
 package pl.uservices.aggregatr.aggregation;
 
-import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.CURRENT_HOLDER;
+import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.TEST_CONFIG;
 import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.TEST_COMMUNICATION_TYPE_HEADER_NAME;
 
 import java.net.URI;
@@ -52,7 +52,7 @@ class MaturingServiceUpdater {
     }
 
     private void notifyDojrzewatr(Ingredients ingredients, String processId) {
-        switch (CURRENT_HOLDER.get().getTestCommunicationType()) {
+        switch (TEST_CONFIG.get().getTestCommunicationType()) {
             case FEIGN:
                 callViaFeign(ingredients, processId);
                 break;
@@ -68,7 +68,7 @@ class MaturingServiceUpdater {
     private void useRestTemplateToCallAggregation(Ingredients body, String processId) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("PROCESS-ID", processId);
-        headers.add(TEST_COMMUNICATION_TYPE_HEADER_NAME, TestConfigurationHolder.CURRENT_HOLDER.get().getTestCommunicationType().name());
+        headers.add(TEST_COMMUNICATION_TYPE_HEADER_NAME, TestConfigurationHolder.TEST_CONFIG.get().getTestCommunicationType().name());
         headers.add("Content-Type", Version.MATURING_V1);
         String serviceName = "maturing";
         String url = "brew";

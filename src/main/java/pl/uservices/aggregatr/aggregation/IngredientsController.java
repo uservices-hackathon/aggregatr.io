@@ -1,6 +1,6 @@
 package pl.uservices.aggregatr.aggregation;
 
-import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.CURRENT_HOLDER;
+import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.TEST_CONFIG;
 import static pl.uservices.aggregatr.aggregation.TestConfigurationHolder.TEST_COMMUNICATION_TYPE_HEADER_NAME;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class IngredientsController {
                                              @RequestHeader(value = TEST_COMMUNICATION_TYPE_HEADER_NAME,
                                                      defaultValue = "REST_TEMPLATE", required = false)
                                              TestCommunicationType testCommunicationType) {
-        CURRENT_HOLDER.set(TestConfigurationHolder.builder().testCommunicationType(testCommunicationType).build());
+        TEST_CONFIG.set(TestConfigurationHolder.builder().testCommunicationType(testCommunicationType).build());
         log.info("Starting process for process id [{}]", processId);
         return ingredientsAggregator.fetchIngredients(order, processId);
     }

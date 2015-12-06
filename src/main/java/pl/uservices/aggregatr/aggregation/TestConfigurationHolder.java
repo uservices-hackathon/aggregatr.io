@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class TestConfigurationHolder {
 	public static final String TEST_COMMUNICATION_TYPE_HEADER_NAME = "TEST-COMMUNICATION-TYPE";
-	public static final ThreadLocal<TestConfigurationHolder> CURRENT_HOLDER = new ThreadLocal<>();
+	public static final ThreadLocal<TestConfigurationHolder> TEST_CONFIG = new ThreadLocal<>();
 
 	private TestCommunicationType testCommunicationType;
 
