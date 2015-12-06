@@ -1,13 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "url": "/slodeo"
+    "url": "/hop"
   },
   "response": {
     "status": 200,
     "headers": {
       "Content-Type": "application/json"
     },
-    "body": "{ \"type\": \"MALT\", \"quantity\": 1000 }"
+    "body": "{ \"type\": \"HOP\", \"quantity\": 1000 }"
   }
 }

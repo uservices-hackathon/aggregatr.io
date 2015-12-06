@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/wodeo"
+    "url": "/water"
   },
   "response": {
     "status": 200,

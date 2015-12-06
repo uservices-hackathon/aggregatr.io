@@ -1,13 +1,14 @@
 package pl.uservices.aggregatr.aggregation;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
-import org.apache.commons.io.IOUtils;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
+
+import org.apache.commons.io.IOUtils;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
 class ExternalServicesStub implements Closeable {
 
@@ -18,13 +19,13 @@ class ExternalServicesStub implements Closeable {
         this.wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig()
                 .port(uri.getPort()));
         wireMockServer.addStubMapping(StubMapping.buildFrom(
-                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/chmieleo.json"))));
+                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/hop.json"))));
         wireMockServer.addStubMapping(StubMapping.buildFrom(
-                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/drozdzeo.json"))));
+                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/yeast.json"))));
         wireMockServer.addStubMapping(StubMapping.buildFrom(
-                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/slodeo.json"))));
+                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/malt.json"))));
         wireMockServer.addStubMapping(StubMapping.buildFrom(
-                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/wodeo.json"))));
+                IOUtils.toString(ExternalServicesStub.class.getResourceAsStream("/mappings/water.json"))));
     }
 
     void start() {

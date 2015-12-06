@@ -1,13 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "url": "/drozdzeo"
+    "url": "/malt"
   },
   "response": {
     "status": 200,
     "headers": {
       "Content-Type": "application/json"
     },
-    "body": "{ \"type\": \"YEAST\", \"quantity\": 1000 }"
+    "body": "{ \"type\": \"MALT\", \"quantity\": 1000 }"
   }
 }
