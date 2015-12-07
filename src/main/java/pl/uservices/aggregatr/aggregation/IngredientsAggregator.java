@@ -25,7 +25,7 @@ import pl.uservices.aggregatr.aggregation.model.Order;
 class IngredientsAggregator {
 
     private final IngredientsProperties ingredientsProperties;
-    private final MaturingServiceUpdater dojrzewatrUpdater;
+    private final MaturingServiceUpdater maturingUpdater;
     private final IngredientWarehouse ingredientWarehouse;
     private final AsyncRestTemplate asyncRestTemplate;
     private final TraceManager traceManager;
@@ -37,11 +37,12 @@ class IngredientsAggregator {
         this.ingredientWarehouse = ingredientWarehouse;
         this.asyncRestTemplate = asyncRestTemplate;
         this.traceManager = traceManager;
-        this.dojrzewatrUpdater = new MaturingServiceUpdater(ingredientsProperties,
+        this.maturingUpdater = new MaturingServiceUpdater(ingredientsProperties,
                 ingredientWarehouse, maturingServiceClient, restTemplate);
         this.ingredientsProperties = ingredientsProperties;
     }
 
+    // TODO: Consider simplifying the case by removing the DB (always matches threshold)
     Ingredients fetchIngredients(Order order, String processId) {
         List<ListenableFuture<ResponseEntity<Ingredient>>> futures = ingredientsProperties
                 .getListOfServiceNames(order)
@@ -56,7 +57,7 @@ class IngredientsAggregator {
                 .filter(ingredient -> ingredient != null)
                 .forEach(ingredientWarehouse::addIngredient);
         Ingredients ingredients = ingredientWarehouse.getCurrentState();
-        return dojrzewatrUpdater.updateIfLimitReached(ingredients, processId);
+        return maturingUpdater.updateIfLimitReached(ingredients, processId);
     }
 
     private <T> T getUnchecked(Future<T> future) {
